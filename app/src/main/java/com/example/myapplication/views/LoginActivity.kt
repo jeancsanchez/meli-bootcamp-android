@@ -29,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
             if (isValid) {
                 showHome()
             } else {
-               showMessageError()
+                showMessageError()
             }
         }
     }
@@ -40,6 +40,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showHome() {
         val intent = Intent(this, HomeActivity::class.java)
+        intent.putExtra(HomeActivity.EMAIL_KEY, binding.edtEmail.text?.toString())
         startActivity(intent)
     }
 }
