@@ -1,6 +1,7 @@
 package com.example.myapplication.views
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -39,8 +40,22 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showHome() {
+        saveTokenInDisk()
+
         val intent = Intent(this, HomeActivity::class.java)
         intent.putExtra(HomeActivity.EMAIL_KEY, binding.edtEmail.text?.toString())
         startActivity(intent)
+    }
+
+    private fun saveTokenInDisk() {
+        getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE)
+            .edit()
+            .putString(SHARED_PREFERENCES_TOKEN_KEY, "123j4k134kl14j12l34j")
+            .apply()
+    }
+
+    companion object {
+        const val SHARED_PREFERENCES_NAME = "Some_cool_name"
+        const val SHARED_PREFERENCES_TOKEN_KEY = "token"
     }
 }
