@@ -2,20 +2,32 @@ package com.example.myapplication.views
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.ActivityHomeBinding
 import com.example.myapplication.vm.LoginViewModel
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
+    private val loginViewModel: LoginViewModel = LoginViewModel()
+    private val adapter by lazy { VehicleAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        getTokenFromDisk()
-        getEmailFromIntent()
+        binding.recycler.adapter = adapter
+        binding.recycler.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+
+        loginViewModel.fetchVehicles()
+        loginViewModel.vehicles.observe(this) {
+            if (it.isNotEmpty()) {
+                adapter.listVehicles = it
+            }
+        }
     }
 
     /**
@@ -23,7 +35,6 @@ class HomeActivity : AppCompatActivity() {
      */
     private fun getEmailFromIntent() {
         val email = intent?.extras?.getString(EMAIL_KEY)
-        binding.title.text = email
     }
 
     /**
@@ -35,9 +46,7 @@ class HomeActivity : AppCompatActivity() {
             MODE_PRIVATE
         ).getString("token", "")
 
-        val emailText = binding.title.text.toString()
-        val newText = "Email: $emailText\nToken: $token"
-        binding.title.text = newText
+
     }
 
     companion object {
