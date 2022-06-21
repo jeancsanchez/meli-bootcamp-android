@@ -3,10 +3,12 @@ package com.example.myapplication.views
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.InputType
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.databinding.ActivityLoginBinding
 import com.example.myapplication.vm.LoginViewModel
+import java.lang.reflect.Type
 
 class LoginActivity : AppCompatActivity() {
 
@@ -39,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(this, "Email invalido", Toast.LENGTH_LONG).show()
     }
 
-    private fun showHome() {
+    fun showHome() {
         saveTokenInDisk()
 
         val intent = Intent(this, HomeActivity::class.java)

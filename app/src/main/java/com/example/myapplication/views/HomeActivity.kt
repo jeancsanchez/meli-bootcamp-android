@@ -1,7 +1,9 @@
 package com.example.myapplication.views
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.ActivityHomeBinding
 import com.example.myapplication.vm.LoginViewModel
@@ -18,9 +20,13 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.recycler.adapter = adapter
-        binding.recycler.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.recycler.layoutManager = GridLayoutManager(this, 3)
 
+        adapter.itemClicked = VehicleAdapter.OnItemClicked {
+            val intent = Intent(this, VehicleDetailActivity::class.java)
+            intent.putExtra(VehicleDetailActivity.KEY_VEHICLE_PLATE, it.plate)
+            startActivity(intent)
+        }
 
         loginViewModel.fetchVehicles()
         loginViewModel.vehicles.observe(this) {

@@ -8,6 +8,12 @@ import com.example.myapplication.model.Vehicle
 
 class VehicleAdapter : RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder>() {
 
+    fun interface OnItemClicked {
+        fun vehicleClicked(vehicle: Vehicle)
+    }
+
+    var itemClicked: OnItemClicked? = null
+
     var listVehicles: List<Vehicle> = emptyList()
         set(value) {
             field = value
@@ -17,7 +23,7 @@ class VehicleAdapter : RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder>() 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VehicleViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemVehicleBinding.inflate(inflater, parent, false)
-        return VehicleViewHolder(binding)
+        return VehicleViewHolder(binding, itemClicked)
     }
 
     override fun onBindViewHolder(holder: VehicleViewHolder, position: Int) {
@@ -27,11 +33,16 @@ class VehicleAdapter : RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder>() 
 
     override fun getItemCount(): Int = listVehicles.size
 
-    class VehicleViewHolder(val binding: ItemVehicleBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class VehicleViewHolder(
+        val binding: ItemVehicleBinding,
+        val itemClicked: OnItemClicked?
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(vehicle: Vehicle) {
             binding.textPlate.text = vehicle.plate
+            binding.root.setOnClickListener {
+                itemClicked?.vehicleClicked(vehicle)
+            }
         }
     }
 }
